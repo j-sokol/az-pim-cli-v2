@@ -12,7 +12,7 @@ import (
 func main() {
 	role := flag.String("r", "", "Role to activate")
 	scope := flag.String("s", "", "Scope of activation")
-	list := flag.Bool("l", false, "List only")
+	list := flag.Bool("l", false, "List roles available for activation")
 	activate := flag.Bool("a", false, "Activate role")
 	flag.Parse()
 
@@ -28,6 +28,11 @@ func main() {
 	result, err := azpim.ListEligibleRoleAssignments(accessToken)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if !*list && !*activate {
+		fmt.Println("No action specified, -l or -a required")
+		flag.Usage()
+		return
 	}
 
 	if *list {
